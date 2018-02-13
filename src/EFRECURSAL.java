@@ -125,7 +125,7 @@ public class EFRECURSAL {
 //						{ 
 							lerExcel("a");
 						  
-							getSetCEF.setPorcentagem((i*100)/afile.length);
+							//getSetCEF.setPorcentagem((i*100)/afile.length);
 							System.out.println(" STATUS: ["+getSetCEF.getPorcentagem()+" %]");
 //						}
 //						else
@@ -530,7 +530,7 @@ public class EFRECURSAL {
 					String posicaoEvalor = "";
 					
 					String M = "M1";
-					String L = "L1";
+					String B = "L1";
 					String N = "N1";
 					
 					ArrayList<String> arrayConteudoExiste = new ArrayList<String> ();
@@ -546,7 +546,8 @@ public class EFRECURSAL {
 					String parcela = "";
 					String CJXLX = "";
 					String CJPDF = "";
-			 
+					String NOMEXLX = "";
+					
 					try {
 
 						ZipSecureFile.setMinInflateRatio(-1.0d);
@@ -558,9 +559,9 @@ public class EFRECURSAL {
 			            getSetCEF.setCjExiste(false);
 			            getSetCEF.setCjNova(true);
 			            
-			            CellReference cellReferencePAR = null;
-			            Row rowLPAR = null;
-			            Cell cellLPAR = null;
+			            CellReference cellReferenceNOME = null;
+			            Row rowLNOME = null;
+			            Cell cellLNOME = null;
 			            
 			            CellReference cellReferenceVAL = null;
 			            Row rowLVAL = null;
@@ -584,15 +585,22 @@ public class EFRECURSAL {
 	
 			            	    	  
 			            	    	  
-			            	    	  	//LENDO AS COLUNAS L1, L2 , L3  (VALOR ATUALIZADO)
-				            		 L = "L"+i;
-				            		 cellReferenceVAL = new CellReference(L);   //Ferencia Coluna M usado na Conta Judicial
-				            		 rowLVAL = sheet.getRow(cellReferenceVAL.getRow());	 //Ferencia Linha usado na Conta Judicial
-				            	     cellLVAL = rowLVAL.getCell(cellReferenceVAL.getCol());
+			            	    	  	//LENDO AS COLUNAS B NOME
+				            		 B = "B"+i;
+				            		 cellReferenceNOME = new CellReference(B);   //Ferencia Coluna M usado na Conta Judicial
+				            		 rowLNOME = sheet.getRow(cellReferenceNOME.getRow());	 //Ferencia Linha usado na Conta Judicial
+				            	     cellLNOME = rowLNOME.getCell(cellReferenceNOME.getCol());
 	
+				            	     if(cellLNOME.CELL_TYPE_STRING==cellLNOME.getCellType()) {
+				            	    	 	NOMEXLX = cellLNOME.getStringCellValue();
+				            	    	 	//System.out.println("NOME DO EXEL :>"+NOMEXLX);
+				            	     }
+				            	    // System.out.println("NOME DO EXEL :>"+NOMEXLX);
 			            	    	  
-			            	    	  
-			            	    	  	//LENDO AS COLUNAS M1, M2 , M3  (CONTA JUDICIAL)
+				            	     
+				            	     
+				            	     
+			            	    	  	//LENDO AS COLUNA M CONTA JUDICIAL
 				            		 M = "M"+i;			            		 
 				            		 cellReferenceCJ = new CellReference(M);   //Ferencia Coluna M usado na Conta Judicial
 				            		 rowLCJ = sheet.getRow(cellReferenceCJ.getRow());	 //Ferencia Linha usado na Conta Judicial
@@ -632,8 +640,9 @@ public class EFRECURSAL {
 				            	     
 
 			            	    	     
-			            	    	     
-				            	      if(contaJudicial == Long.parseLong(CJPDF)) 
+			            	    	     	
+				            	      //if(contaJudicial == Long.parseLong(CJPDF))
+				            	    	  if(contaJudicial == Long.parseLong(CJPDF) && NOMEXLX.equals(getSetCEF.getAutor()))
 			                        	{
 				            	    	  
 				            	    	     System.out.println("contaJudicial EXEL :>"+contaJudicial);
@@ -643,40 +652,6 @@ public class EFRECURSAL {
 				            	    	     
 				            	    	  		getSetCEF.setPosicaoExiste(i);	
 			                        	 	getSetCEF.setCjNova(false);
-	                  	 	
-			                        	 
-			                        	 	//---> VOU ADCIONANDO NO ARRAY ROSA QUE EXISTE PRA PINTAR DE UMA UNICA VEZ.
-			                        	 	//arrayConteudoCJExisteNaoUnica.add(Integer.toString(getSetCEF.getPosicaoExiste()));
-			                        	 	
-			                        	 	
-		                        	 		//Guarda o Valor atualizado para futura comparacao
-			   			            	     if(cellLVAL.CELL_TYPE_NUMERIC==cellLVAL.getCellType()) {
-			   			            	    	 	valotAtualizado = String.valueOf(cellLVAL.getNumericCellValue()) ;
-						            	     }
-			   			            	     if(cellLVAL.CELL_TYPE_STRING==cellLVAL.getCellType()) {
-			   			            	    	 	valotAtualizado =	cellLVAL.getStringCellValue();
-						            	     }
-			   			            	     
-//			   			            	     //Guardando a Parcela
-//						            	     if(cellLPAR != null)
-//						            	     {			            	    	 	
-//						            	    	 	if(cellLPAR.CELL_TYPE_STRING==cellLPAR.getCellType() ) {			            	    	 		
-//						            	    	 		numeroParcela = cellLPAR.getStringCellValue();
-//						            	    	 	}
-//						            	     }
-			   			            	     
-			   			            	     //---> ADIDIONA NESTE ARRAY PARA SABER SE JA EXISTE ANTES DE INCLUIR COM O MESMO VALOR E CONTA JUDICIAL
-			   			            	  //	arrayConteudoCJExisteNaoUnicaIncluirValor.add(valotAtualizado);
-			   			            	  //	arrayConteudoCJExisteNaoUnicaIncluirParcela.add(numeroParcela);
-			   			            	     
-			                        	 		
-//			                        	 	if(getSetCEF.isCjExiste()) //ver se a conta existe e é unica ou nao
-//			                        	 	{
-//			                        	 		getSetCEF.setCjExisteUnica(false);
-//			                        	 		//EscreverExistiNaoUnica();  // PINTA DE ROSA PARA AVIAR QUE TEM DUPLICIDADE E CONFERENCIA
-//			                        	 		continue;// Se ja ter mais de uma para a verificacao		                        	 		
-//			                        	 	}
-		                        	 		
 			                        	 	getSetCEF.setCjExiste(true); 
 		                        	 		
 			                        	}
@@ -738,99 +713,7 @@ public class EFRECURSAL {
 						         e.printStackTrace();  
 						     } 
 		            	 	}
-//		            	 	else if(!getSetCEF.isCjExisteUnica()) 
-//		            	 	{
-//		            	 		String Valor = "";
-//		            	 		String ValorApoio = "";
-//		            	 		String valotVaiAtualizar = "";
-//		            	 		
-//		            	 		Valor  = getSetCEF.getValorAtualizado();
-//		            	 		ValorApoio = getSetCEF.getValorAtualizado();
-//		            	 		ValorApoio = ValorApoio.replace(".", "");
-//		            	 		ValorApoio = ValorApoio.replace(",", "");
-//	
-//		            	 		
-//		            	 		//COLOCO NO BEAN PARA QUANDO SABER AS LINHAS QUE PRECISA PINTAR DE ROSA QUE JA EXISTEM NAS LINHAS PASSADAS - EscreverExistiNaoUnica()
-//		            	 		//getSetCEF.setArrayCJExisteNaoUnica(arrayConteudoCJExisteNaoUnica);
-//		            	 		
-//		            	 		//PINTA DE ROSA OS EXISTENTES  --- PINTAR ROS ESCURO sera os que nao conseguiu identificar
-//		            	 		//EscreverExistiNaoUnica();
-//	
-//		            	 		//LIMPA O ARRAY PARA PODER PINTAR OS PROXIOS
-//		            	 		//arrayConteudoCJExisteNaoUnica.clear();
-//		            	 		
-//		            	 		
-//		            	 		
-//		    			        for (int i = 0; i < arrayConteudoCJExisteNaoUnicaIncluirValor.size(); i++) {
-//		    			        		
-//		    			        		//Pegando Valor
-//		    			        		valotVaiAtualizar = arrayConteudoCJExisteNaoUnicaIncluirValor.get(i);
-//		    			        		valotVaiAtualizar = valotVaiAtualizar.replace(".", "");
-//		    			        		valotVaiAtualizar = valotVaiAtualizar.replace(",", "");
-//		    			        	
-//		    			        		
-//		    			        		//Pegando Parcela
-//		    			        		ConteudoExistenumeroParcela = arrayConteudoCJExisteNaoUnicaIncluirParcela.get(i);
-//		    			        		//ConteudoExistenumeroParcela = (ConteudoExistenumeroParcela.substring(ConteudoExistenumeroParcela.length() - 2).trim()).toUpperCase(); // Pega apenas os dois ultimos Digitos
-//		    			        		
-//		    			        		ConteudoExistenumeroParcela = (ConteudoExistenumeroParcela.toUpperCase()).trim();
-//		    			        		ConteudoExistenumeroParcela = ConteudoExistenumeroParcela.replace("0", "");
-//		    			        		
-//		    			        		parcela = (getSetCEF.getParcela().toUpperCase()).trim();
-//		    			        		parcela = parcela.replace("0", "");
-//		    			        		
-//		    			        		//Pegando a posicao e Valor para gravar caso a CJ existe e o numero da parcela tambem for igual
-//		    			        		getSetCEF.setPosicaoExiste(Integer.parseInt(arrayConteudoCJExisteNaoUnica.get(i)));
-//		    			        		
-//		    			        		System.out.println("                                                           ");
-//		    			        		System.out.println("Valor Excell         |" + valotVaiAtualizar+"|");	            	 		
-//		    	            	 		System.out.println("Valor PDF            |" + ValorApoio +"|");
-//		    	            	 		System.out.println("------------------------------------------------------------");
-//		    	            	 		System.out.println("Parcela Excel        |" + ConteudoExistenumeroParcela +"|");	            	 		
-//		    	            	 		System.out.println("Parcela PDF          |" + parcela +"|");	    			        		
-//
-//		    	            	 		System.out.println("                                                           ");
-//			            	 		
-//		    	            	 		
-//		    	            	 		if(valotVaiAtualizar.equals(ValorApoio) || valotVaiAtualizar == ValorApoio) // Contas Juducuas ja sei que sao iguais a pergunra se o valor e diferente
-//		    	                	 	{
-//		    			            		System.out.println("VAI BARRAR -- VALORES IGUAIS NAO ATUALIZAR");
-//		    			            		barrarGravacaoContaJaExiste = true;
-//		    			            		break;
-//		    	                	 	}
-//			    	            	 	else if( ConteudoExistenumeroParcela.equals(parcela)   || ConteudoExistenumeroParcela == parcela) // Parcelas Iguais Atualiza Valor da Parcela
-//			    	            	 	{
-//			    	            	 		//SE ENCONTRAR A MESMA PARCELA
-//			    	            	 		//PINTA DE ROSA E ATUALIZA O VALOR
-//			    	            	 		
-//			    	            	 		getSetCEF.setValorAtualizado(Valor);
-//
-//			    	            	 		System.out.println("CONTA IGUAL E PARCELA DIFERENTE-  VAI ATUALIZAR O VALOR");
-//			    	            	 		EscreverExistiNaoUnicaComValor();
-//			    	            	 		
-//			    	            	 		barrarGravacaoContaJaExiste = true;
-//			    	            	 		
-//			    	            	 		break;
-//			    	            	 	}
-//			    	            	 	else
-//			            	 				barrarGravacaoContaJaExiste = false;
-//						        }
-//			            	 		
-//		
-//			    			        if( !barrarGravacaoContaJaExiste)
-//			    			        		EscreverExistiNaoUnicaNovo();
-//	        	 				
-//	        	 				
-//			            	 	//PAUSA PARA PODER GRAVAR O EXCEL
-//					        	try 
-//					        	{  
-//					        //System.out.println(" PAUSA");
-//					        		Thread.sleep( 100 );  
-//					        	} 
-//					        	catch (InterruptedException e) {  
-//							    e.printStackTrace();  
-//							} 
-//			            	 }	
+
 		        } catch (IOException e) {
 		            e.printStackTrace();
 		        }				
@@ -839,11 +722,16 @@ public class EFRECURSAL {
 		  
 		  
 		  
-		  public static void EscreverExistiUnicaComValor() throws IOException {
+		  @SuppressWarnings("resource")
+		public static void EscreverExistiUnicaComValor() throws IOException {
 			  try{
-				  	fo = new File(excelBB);
-			        XSSFWorkbook a = new XSSFWorkbook(new FileInputStream(fo));
-			        XSSFSheet my_sheet = a.getSheetAt(0);
+				  	XSSFWorkbook a = null; 
+				  	
+			         a = new XSSFWorkbook(new FileInputStream(fo));
+			        
+			         XSSFSheet my_sheet = null;
+			         
+			         my_sheet = a.getSheetAt(0);
 			        
 			        System.out.println("1-  EscreverExistiUnicaComValor GRAVAR NA LINHA :  " + getSetCEF.getPosicaoExiste());
 			        
@@ -925,7 +813,9 @@ public class EFRECURSAL {
 			        my_sheet.getRow(getSetCEF.getPosicaoExiste()-1).getCell(12).setCellType(XSSFCell.CELL_TYPE_STRING);
 //			        my_sheet.getRow(getSetCEF.getPosicaoExiste()-1).getCell(13).setCellStyle(style2);
 			        
-			        FileOutputStream outputStream = new FileOutputStream(new File(excelBB));
+			        FileOutputStream outputStream  = null;
+			        outputStream = new FileOutputStream(new File(excelBB));
+
 			        a.write(outputStream);
 			        outputStream.close();//Close in finally if possible
 			        outputStream = null;
@@ -938,11 +828,16 @@ public class EFRECURSAL {
 			}
 
 		  
-		  public static void EscreverExistiUnicaValorZero() throws IOException {
+		  @SuppressWarnings("resource")
+		public static void EscreverExistiUnicaValorZero() throws IOException {
 			  try{
-				  	fo = new File(excelBB);
-			        XSSFWorkbook a = new XSSFWorkbook(new FileInputStream(fo));
-			        XSSFSheet my_sheet = a.getSheetAt(0);
+				  	XSSFWorkbook a = null; 
+				  	
+			         a = new XSSFWorkbook(new FileInputStream(fo));
+			        
+			         XSSFSheet my_sheet = null;
+			         
+			         my_sheet = a.getSheetAt(0);
 			        
 			        System.out.println("2 -  EscreverExistiUnicaValorZero GRAVAR NA LINHA :  " + getSetCEF.getPosicaoExiste());
 			        
@@ -1029,7 +924,9 @@ public class EFRECURSAL {
 //			        my_sheet.getRow(getSetCEF.getPosicaoExiste()-1).getCell(13).setCellStyle(style2);
 			        
      
-			        FileOutputStream outputStream = new FileOutputStream(new File(excelBB));
+			        FileOutputStream outputStream  = null;
+			        outputStream = new FileOutputStream(new File(excelBB));
+
 			        a.write(outputStream);
 			        outputStream.close();//Close in finally if possible
 			        
@@ -1044,11 +941,13 @@ public class EFRECURSAL {
 		  public static void EscreverContaNovaComValor() throws IOException {
 			  try{
 				  
-				  
+				  	XSSFWorkbook a = null; 
 				  	
-			        XSSFWorkbook a = new XSSFWorkbook(new FileInputStream(fo));
+			         a = new XSSFWorkbook(new FileInputStream(fo));
 			        
-			        XSSFSheet my_sheet = a.getSheetAt(0);
+			         XSSFSheet my_sheet = null;
+			         
+			         my_sheet = a.getSheetAt(0);
 			        
 			        
 			        System.out.println("3 -  EscreverContaNovaComValor GRAVAR NA LINHA :  " + getSetCEF.getContadorPosicao());
@@ -1175,7 +1074,9 @@ public class EFRECURSAL {
 //			        my_sheet.getRow(getSetCEF.getContadorPosicao()-1).getCell(13).setCellStyle(style2);
 //			        my_sheet.getRow(getSetCEF.getContadorPosicao()-1).getCell(13).setCellType(XSSFCell.CELL_TYPE_STRING);
 
-			        FileOutputStream outputStream = new FileOutputStream(new File(excelBB));
+			        FileOutputStream outputStream  = null;
+			        outputStream = new FileOutputStream(new File(excelBB));
+
 			        a.write(outputStream);
 			        outputStream.close();//Close in finally if possible
 			        outputStream = null;
@@ -1189,10 +1090,13 @@ public class EFRECURSAL {
 		  
 		  public static void EscreverContaNovaValorZero() throws IOException {
 			  try{
-				  	fo = new File(excelBB);
-			        XSSFWorkbook a = new XSSFWorkbook(new FileInputStream(fo));
+				  	XSSFWorkbook a = null; 
+				  	
+			         a = new XSSFWorkbook(new FileInputStream(fo));
 			        
-			        XSSFSheet my_sheet = a.getSheetAt(0);
+			         XSSFSheet my_sheet = null;
+			         
+			         my_sheet = a.getSheetAt(0);
 			        
 			        
 			        System.out.println("4 -  EscreverContaNovaValorZero GRAVAR NA LINHA :  " + getSetCEF.getContadorPosicao());
@@ -1317,8 +1221,8 @@ public class EFRECURSAL {
 //			        my_sheet.getRow(getSetCEF.getContadorPosicao()-1).getCell(13).setCellStyle(style2);
 //			        my_sheet.getRow(getSetCEF.getContadorPosicao()-1).getCell(13).setCellType(XSSFCell.CELL_TYPE_STRING);
 
-			        
-			        FileOutputStream outputStream = new FileOutputStream(new File(excelBB));
+			        FileOutputStream outputStream  = null;
+			        outputStream = new FileOutputStream(new File(excelBB));
 			        a.write(outputStream);
 			        outputStream.close();//Close in finally if possible
 			        
